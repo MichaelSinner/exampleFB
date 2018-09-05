@@ -14,3 +14,16 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/login/facebook', 'Auth\LoginController@redirectToFacebookProvider');
+Route::get('login/facebook/callback', 'Auth\LoginController@handleProviderFacebookCallback');
+
+Route::group(['middleware' => ['auth']], function(){
+    Route::get('/user', 'GraphController@retrieveUserProfile');
+    Route::post('/user', 'GraphController@publishToProfile');
+    Route::post('/page', 'GraphController@publishToPage');
+});
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
